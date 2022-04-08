@@ -1,0 +1,26 @@
+{% extends "myshop/base.html" %}
+{% load shop_tags %}
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}
+    <h1>Checkout</h1>
+    <div class="order-info">
+        <h3>Your order</h3>
+        <ul>
+            {% for product in products %}
+            <li>
+                {% get_quantity product request.session.cart %}x {{ product.name }}
+                <span>${% get_price product request.session.cart %}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <p>Total: ${% get_total_price products request.session.cart %}</p>
+    </div>
+        <form method="post" class="order-form">
+            {{ form.as_p }}
+            <p><input type="submit" value="Place order"></p>
+            {% csrf_token %}
+            </form>
+{% endblock %}

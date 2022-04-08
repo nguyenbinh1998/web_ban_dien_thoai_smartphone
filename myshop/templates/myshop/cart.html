@@ -1,0 +1,52 @@
+{% extends "myshop/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load shop_tags %}
+{% load humanize %}
+{% block title %}
+    Your shopping cart
+{% endblock %}
+{% block content %}
+    <h1>Your shopping cart</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+                <th>Unit price</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{{ product.image.url }}">
+                        </a>
+                    </td>
+                    <td>
+                        {{ product.name }}
+                    </td>
+                    <td>{% get_quantity product request.session.cart  %}</td>
+                    <td>
+                        <a href="{% url 'remove' product.id %}" class="btn btn-info btn-sm" >Remove</a>
+                    </td>
+                    <td>${{ product.price }}</td>
+                    <td>${% get_price product request.session.cart  %}</td>
+                </tr>
+            {% endfor %}
+                <tr class="total">
+                    <td>Total</td>
+                    <td colspan="4"></td>
+                    <td>${% get_total_price products request.session.cart %}</td>
+                </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url 'store' %}" class="button light">Continue shopping</a>
+        <a href="{% url 'checkout' %}" class="button">Checkout</a>
+    </p>
+{% endblock %}
